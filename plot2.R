@@ -1,0 +1,25 @@
+# load the data
+# I will load it already filtered to avoid loading unnecessary data saving memory and time 
+#   using sqldf command when loading the csv
+
+library(sqldf)
+library(lubridate)
+
+# setwd("d:/Marcos/RProg/exploratory_data_analysis/projects/week1/ExData_Plotting1/")
+
+# I am storing the file in the parent folder that contains the repository:
+file <- "../household_power_consumption.txt"
+
+# filter out just the ones from 2007-02-01 to 2007-02-02 which are the ones are going to be analysed
+# unfortunately, dates are stored as d/m/yyyy and it is quite tricky get it right as a date using sql, using R it is much easier
+data <- read.csv.sql(file, sql = "select * from file where Date=='1/2/2007' OR Date=='2/2/2007'", sep = ";")
+# tidying up date and time, convert them to a real dateTime column adding an extra column called DateTime:
+data$DateTime <- dmy(data$Date)+hms(data$Time)
+
+# this is a linear plot of the global active power within the two days:
+# PLEASE, NOTE:
+# since I work on a Spanish computer, it says 'jue' instead of 'thu', 'vie' instead of 'fri' and 'sab' instead of 'sat'
+png("plot2.png", width=480, height=480, units='px')
+plot(data$DateTime, data$Global_active_power, ylab = "Global Active Power (kilowatts)", xlab='', type='l')
+dev.off()
+
