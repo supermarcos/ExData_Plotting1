@@ -16,6 +16,12 @@ data <- read.csv.sql(file, sql = "select * from file where Date=='1/2/2007' OR D
 # tidying up date and time, convert them to a real dateTime column adding an extra column called DateTime:
 data$DateTime <- dmy(data$Date)+hms(data$Time)
 
+# preserve the existing locale
+my_locale <- Sys.getlocale("LC_ALL")
+
+# change locale to English (avoid to appear jue, vie, sab... as my local language and display thu, fri and sat)
+Sys.setlocale("LC_ALL", "English")
+
 # this is a linear plot of the global active power within the two days:
 # PLEASE, NOTE:
 # since I work on a Spanish computer, it says 'jue' instead of 'thu', 'vie' instead of 'fri' and 'sab' instead of 'sat'
@@ -23,3 +29,5 @@ png("plot2.png", width=480, height=480, units='px')
 plot(data$DateTime, data$Global_active_power, ylab = "Global Active Power (kilowatts)", xlab='', type='l')
 dev.off()
 
+# restore locale (this seems to be giving a warning on my computer...)
+Sys.setlocale("LC_ALL", my_locale)

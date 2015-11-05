@@ -31,6 +31,5 @@ lines(data$DateTime, data$Sub_metering_3, col = "blue")
 legend('topright', legend = c("Sub metering 1", "Sub metering 2", "Sub metering 3"), col = c("black", "red", "blue"), lty = "solid")
 dev.off()
 
-
-## restore locale
+# restore locale (this seems to be giving a warning on my computer...)
 Sys.setlocale("LC_ALL", my_locale)
